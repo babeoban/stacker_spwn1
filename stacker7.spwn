@@ -1,0 +1,169 @@
+extract obj_props
+
+line = counter(0)
+block = counter(0)
+right = counter(0)
+win = counter(0)
+place = counter(5)
+loose = counter(0)
+play = counter(0)
+chim = counter(10)
+first = counter(0)
+
+spawn_trigger(!{play = 1}, 0).with(X, 50).with(Y, 50).add()
+
+line.display(10, 10)
+
+on(touch(), !{
+    if play == 1 {
+        22g!
+    if win == 0 {
+    if loose == 0 {
+        if block != 5 {
+            if block == 4   {
+                31g.move(0,-10,0)
+                32g.move(0,10,0)
+                place -= 1
+                27g.alpha(0)
+                loose += 1
+                first -= 1 
+            }   else if block == 6 {
+                31g.move(0,-10,0)
+                33g.move(0,10,0)
+                place += 1
+                25g.alpha(0)
+                loose += 1
+                chim += 1
+            }   else if block == 3 {
+                31g.move(0,-10,0)
+                36g.move(0,10,0)
+                place -= 2
+                27g.alpha(0)
+                26g.alpha(0)
+                loose += 2
+                first -= 2
+            }   else if block == 7 {
+                31g.move(0,-10,0)
+                38g.move(0,10,0)
+                place += 2
+                25g.alpha(0)
+                26g.alpha(0)
+                loose += 2
+                chim += 2
+            }   else    {
+                28g.move(-10,0,0)
+                853g!
+            }
+        }
+    }   else if loose == 1 {
+        if place == 4  {
+            if block !=4 {
+                if  block == 3  {
+                    place -= 1
+                    26g.alpha(0)
+                    loose += 1
+                    31g.move(0,-10,0)
+                    36g.move(0,10,0)
+                    first -= 1
+                }   else if block == 5  {
+                    place += 1
+                    25g.alpha(0)
+                    loose += 1
+                    31g.move(0,-10,0)
+                    37g.move(0,10,0)
+                    chim += 1
+                }   else    {
+                    28g.move(-10,0,0)
+                    853g!
+                }
+            }  else {
+                31g.move(0,-10,0)
+                32g.move(0,10,0)
+            } 
+        }   else if place == 6  {
+            if block !=6    {
+                if block == 5   {
+                    place -=1
+                    27g.alpha(0)
+                    loose +=1
+                    31g.move(0,-10,0)
+                    37g.move(0,10,0)
+                    first -= 1
+                }   else if block == 7 {
+                    place += 1  
+                    26g.alpha(0)
+                    loose += 1
+                    31g.move(0,-10,0)
+                    38g.move(0,10,0)
+                    chim += 1
+                }   else    {
+                    28g.move(-10,0,0)
+                    853g!
+                }
+            }   else {
+                31g.move(0,-10,0)
+                33g.move(0,10,0)
+            }
+        }
+    }   else if loose == 2  {
+        if place == 3   {
+            31g.move(0,-10,0)
+            36g.move(0,10,0)
+        }   else if place == 5 {
+            31g.move(0,-10,0)
+            37g.move(0,10,0)
+        }   else if place == 7 {
+            31g.move(0,-10,0)
+            38g.move(0,10,0)
+        }
+        if place != block   {
+            28g.move(-10,0,0)
+            853g!
+        }
+    }
+    24g!
+    line += 1
+    block = 0
+    right = 0
+    if line >= 1 && line <= 19    {
+        @group(line.to_const(1..20) + 1).alpha(1)
+    }   else if line == 20   {
+        870g!
+    }
+    if line == 20   {
+        win += 1
+    }   else if line > 4 {
+        23g.move(0,-10,0)
+        41g.move(0,10,0)
+        41g.move(0,-10,0.3)
+    }   else {
+        31g.move(0,10,0)
+    }
+    }
+    }
+})
+
+while_loop(() => win == 0, () { 
+    if play == 1 {
+        if right == 0 {
+            @group(line.to_const(0..20) + 1).move(10,0,0)
+            block += 1
+            if block == 10 && chim == 10 {
+                right += 1
+            }   else if block == 11 && chim == 11 {
+                right += 1
+            }   else if block == 12 && chim == 12 {
+                right += 1
+            }
+        }   else    {
+            @group(line.to_const(0..20) + 1).move(-10,0,0)
+            block -= 1
+            if first == 0 && block == 0 {
+                right -= 1
+            }   else if first == -1 && block == -1 {
+                right -= 1
+            }   else if first == -2 && block == -2 {
+                right -= 1
+            }
+        }
+ }}, delay = 0.04)
